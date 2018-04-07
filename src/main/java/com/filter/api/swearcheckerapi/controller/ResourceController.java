@@ -50,6 +50,7 @@ public class ResourceController {
 
     @RequestMapping(value = "principal", method = RequestMethod.GET)
     public Object getPrincipal() {
+        //TODO: crashes when USER access it.
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return principal;
     }
