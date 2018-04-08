@@ -1,6 +1,6 @@
 package com.filter.api.swearcheckerapi.controller;
 
-import com.filter.api.swearcheckerapi.model.Role;
+import com.filter.api.swearcheckerapi.model.Authority;
 import com.filter.api.swearcheckerapi.model.User;
 import com.filter.api.swearcheckerapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Set;
 
 @Controller
 public class LoginController {
@@ -27,7 +25,10 @@ public class LoginController {
     private UserDetailsService userService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder userPasswordEncoder;
+
+    @Autowired
+    private PasswordEncoder oauthClientPasswordEncoder;
 
     @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
     public ModelAndView login(){
@@ -58,8 +59,8 @@ public class LoginController {
             modelAndView.setViewName("registration");
         } else {
 
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.getRoles().add(new Role(2, "USER"));
+            user.setPassword(userPasswordEncoder.encode(user.getPassword()));
+            user.getAuthorities().add(new Authority(2L, "USER"));
 
             ((UserService)userService).save(user);
             modelAndView.addObject("successMessage", "User has been registered successfully");
@@ -76,7 +77,7 @@ public class LoginController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails user = userService.loadUserByUsername(auth.getName());
         modelAndView.addObject("userName", "Welcome " + user.getUsername() + " " + user.getAuthorities());
-        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
+        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Authority");
         modelAndView.setViewName("admin/home");
         return modelAndView;
     }
