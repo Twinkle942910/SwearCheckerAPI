@@ -19,8 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/resources")
-public class ResourceController {
+@RequestMapping("/infos")
+public class InfoController {
 
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -42,7 +42,8 @@ public class ResourceController {
         return "hello user authenticated by normal client";
     }
 
-    @PreAuthorize("hasRole('ROLE_TRUSTED_CLIENT')")
+   // @PreAuthorize("hasRole('ROLE_TRUSTED_CLIENT')")
+    @PreAuthorize("hasAuthority('ROLE_TRUSTED_CLIENT') and hasAuthority('USER')")
     @RequestMapping(value = "trusted_client", method = RequestMethod.GET)
     public String helloTrustedClient() {
         return "hello user authenticated by trusted client";

@@ -1,59 +1,50 @@
 package com.filter.api.swearcheckerapi.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
-import javax.persistence.*;
-import java.util.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static java.util.Collections.EMPTY_SET;
 
 @Entity
-@Table(name = "CLIENT", uniqueConstraints = {@UniqueConstraint(columnNames = {"CLIENT_ID"})})
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
+@Table(name = "oauth_client_details")
+@Data
 public class Client implements ClientDetails {
-    private static final String RESOURCE_ID = "swearchecker-rest-api";
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID", nullable = false, updatable = false)
-    private Long id;
-
-    @Column(name = "CLIENT_ID", nullable = false)
+    @Column(name = "client_id", nullable = false)
     private String clientId;
-
-    @Column(name = "CLIENT_SECRET")
+    @Column(name = "resource_ids")
+    private String resourceIds;
+    @Column(name = "client_secret", nullable = false)
     private String clientSecret;
-
-    @Column(name = "SECRET_REQUIRED", nullable = false)
-    private boolean secretRequired;
-
-    @Column(name = "SCOPED", nullable = false)
-    private boolean isScoped;
-
-    @Column(name = "SCOPE")
-    @ElementCollection
-    private Set<String> scopes = new HashSet<>();
-
-    @Column(name = "REDIRECT_URL")
-    private String redirectURL;
-
-    @Column(name = "GRANT_TYPES")
-    @ElementCollection
-    private Set<String> grantTypes = new HashSet<>();
-
-    @Column(name = "AUTHORITIES")
-    @OneToMany(targetEntity=Authority.class, fetch=FetchType.EAGER)
-    private Collection<GrantedAuthority> authorities = new HashSet<>();
-
-    @Column(name = "ACCESS_TOKEN_VALIDITY", nullable = false)
-    private int tokenValidity;
-
-    @Column(name = "REFRESH_TOKEN_VALIDITY", nullable = false)
-    private int refreshTokenValidity;
+    @Column(name = "scope", nullable = false)
+    private String scope;
+    @Column(name = "authorized_grant_types", nullable = false)
+    private String grantTypes;
+    @Column(name = "web_server_redirect_uri")
+    private String webServerRedirectUri;
+    @Column(name = "authorities", nullable = false)
+    private String authorities;
+    @Column(name = "access_token_validity", nullable = false)
+    private Integer accessTokenValidity;
+    @Column(name = "refresh_token_validity")
+    private Long refreshTokenValidity;
+    @Column(name = "additional_information", length = 4096)
+    private String additionalInfo;
+    @Column(name = "autoapprove")
+    private String autoApprove;
 
     @Override
     public String getClientId() {
@@ -62,61 +53,73 @@ public class Client implements ClientDetails {
 
     @Override
     public Set<String> getResourceIds() {
-        return Collections.singleton(RESOURCE_ID);
+        return new HashSet<>(Arrays.asList(resourceIds.split("[^a-zA-Z0-9]")));
     }
 
     @Override
     public boolean isSecretRequired() {
-        return secretRequired;
-    }
-
-    @Override
-    public String getClientSecret() {
-        return isSecretRequired() ? clientSecret : "";
-    }
-
-    @Override
-    public boolean isScoped() {
-        return isScoped;
-    }
-
-    @Override
-    public Set<String> getScope() {
-        return isScoped() ? scopes : new HashSet<>();
-    }
-
-    @Override
-    public Set<String> getAuthorizedGrantTypes() {
-        return grantTypes;
-    }
-
-    @Override
-    public Set<String> getRegisteredRedirectUri() {
-        return Collections.singleton(redirectURL);
-    }
-
-    @Override
-    public Collection<GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @Override
-    public Integer getAccessTokenValiditySeconds() {
-        return tokenValidity;
-    }
-
-    @Override
-    public Integer getRefreshTokenValiditySeconds() {
-        return refreshTokenValidity;
-    }
-
-    @Override
-    public boolean isAutoApprove(String s) {
         return false;
     }
 
     @Override
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    @Override
+    public boolean isScoped() {
+        return false;
+    }
+
+    @Override
+    public Set<String> getScope() {
+        return new HashSet<>(Arrays.asList(scope.split("[^a-zA-Z0-9]")));
+    }
+
+    @Override
+    public Set<String> getAuthorizedGrantTypes() {
+        return new HashSet<>(Arrays.asList(grantTypes.split("[^a-zA-Z0-9]")));
+    }
+
+    @Override
+    public Set<String> getRegisteredRedirectUri() {
+        return Collections.singleton(webServerRedirectUri);
+    }
+
+    @Override
+    public Collection<GrantedAuthority> getAuthorities() {
+        Collection<GrantedAuthority> authoritiesSet = new HashSet<>();
+        Arrays.stream(authorities.split("[^a-zA-Z0-9]")).forEach(authority -> {
+            Authority authorityObj = new Authority();
+            authorityObj.setName(authority);
+
+            authoritiesSet.add(authorityObj);
+        });
+        return authoritiesSet;
+    }
+
+    @Override
+    public Integer getAccessTokenValiditySeconds() {
+        return accessTokenValidity;
+    }
+
+    @Override
+    public Integer getRefreshTokenValiditySeconds() {
+        return Math.toIntExact(refreshTokenValidity);
+    }
+
+    @Override
+    public boolean isAutoApprove(String s) {
+        return Boolean.parseBoolean(autoApprove);
+    }
+
+    @Override
     public Map<String, Object> getAdditionalInformation() {
-        return null;
+        Map<String, Object> addInfo = new HashMap<>();
+        Arrays.stream(additionalInfo.split("[^a-zA-Z0-9]")).forEach(info -> {
+            String[] parts = info.split("=");
+            addInfo.put(parts[0], parts[1]);
+        });
+        return addInfo;
     }
 }

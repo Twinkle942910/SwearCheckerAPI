@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
@@ -49,6 +50,11 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     }
 
     @Bean
+    public TokenStore tokenStore() {
+        return new JdbcTokenStore(dataSource);
+    }
+
+    @Bean
     public OAuth2AccessDeniedHandler oauthAccessDeniedHandler() {
         return new OAuth2AccessDeniedHandler();
     }
@@ -56,6 +62,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
+                .tokenStore(tokenStore())
                 .authenticationManager(this.authenticationManager)
                 .userDetailsService(userDetailsService)
                 .accessTokenConverter(accessTokenConverter());
@@ -63,8 +70,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-        oauthServer.tokenKeyAccess("isAnonymous() || hasAuthority('ROLE_TRUSTED_CLIENT')")
-                .checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')")
+        oauthServer.tokenKeyAccess("isAnonymous() || hasAuthority('USER')")
+                .checkTokenAccess("hasAuthority('USER')")
                 .passwordEncoder(oauthClientPasswordEncoder)
                 .allowFormAuthenticationForClients();
     }

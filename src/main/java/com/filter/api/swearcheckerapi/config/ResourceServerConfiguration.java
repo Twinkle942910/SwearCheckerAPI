@@ -16,7 +16,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     private static final String RESOURCE_ID = "swearchecker-rest-api";
     private static final String SECURED_READ_SCOPE = "#oauth2.hasScope('read')";
     private static final String SECURED_WRITE_SCOPE = "#oauth2.hasScope('write')";
-    private static final String SECURED_PATTERN = "/resources/**";
+    private static final String SECURED_PATTERN = "/infos/**";
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
