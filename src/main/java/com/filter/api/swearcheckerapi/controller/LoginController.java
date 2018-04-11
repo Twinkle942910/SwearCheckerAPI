@@ -10,6 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +27,27 @@ public class LoginController {
     private UserDetailsService userService;
 
     @Autowired
+    @Qualifier("clientDetailsServiceImpl")
+    private ClientDetailsService clientDetailsService;
+
+    @Autowired
     private PasswordEncoder userPasswordEncoder;
 
     @Autowired
     private PasswordEncoder oauthClientPasswordEncoder;
 
-    @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/", "/home"}, method = RequestMethod.GET)
+    public ModelAndView home(){
+        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        ClientDetails client = clientDetailsService.loadClientByClientId(auth.getName());
+        modelAndView.addObject("client_id", client.getClientId());
+        modelAndView.addObject("client_secret", client.getClientSecret());
+        modelAndView.setViewName("home");
+        return modelAndView;
+    }
+
+    @RequestMapping(value={"/login"}, method = RequestMethod.GET)
     public ModelAndView login(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
@@ -72,7 +89,7 @@ public class LoginController {
     }
 
     @RequestMapping(value="/admin/home", method = RequestMethod.GET)
-    public ModelAndView home(){
+    public ModelAndView adminHome(){
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails user = userService.loadUserByUsername(auth.getName());
