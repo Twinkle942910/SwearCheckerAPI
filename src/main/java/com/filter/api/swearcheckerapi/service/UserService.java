@@ -26,7 +26,7 @@ public class UserService implements UserDetailsService {
 
         throw new UsernameNotFoundException(username);*/
 
-       return userRepository.findByUsername(username);
+        return org.springframework.security.core.userdetails.User.withUserDetails(userRepository.findByUsername(username)).build();
     }
 
     public void save(User user) {

@@ -2,6 +2,7 @@ package com.filter.api.swearcheckerapi.model;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
 import javax.persistence.Column;
@@ -15,8 +16,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import static java.util.Collections.EMPTY_SET;
 
 @Entity
 @Table(name = "oauth_client_details")
@@ -53,7 +52,7 @@ public class Client implements ClientDetails {
 
     @Override
     public Set<String> getResourceIds() {
-        return new HashSet<>(Arrays.asList(resourceIds.split("[^a-zA-Z0-9]")));
+        return Collections.singleton(resourceIds);
     }
 
     @Override
@@ -78,7 +77,7 @@ public class Client implements ClientDetails {
 
     @Override
     public Set<String> getAuthorizedGrantTypes() {
-        return new HashSet<>(Arrays.asList(grantTypes.split("[^a-zA-Z0-9]")));
+        return new HashSet<>(Arrays.asList(grantTypes.split(",")));
     }
 
     @Override
@@ -88,14 +87,7 @@ public class Client implements ClientDetails {
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authoritiesSet = new HashSet<>();
-        Arrays.stream(authorities.split("[^a-zA-Z0-9]")).forEach(authority -> {
-            Authority authorityObj = new Authority();
-            authorityObj.setName(authority);
-
-            authoritiesSet.add(authorityObj);
-        });
-        return authoritiesSet;
+        return new HashSet<>(AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
     }
 
     @Override

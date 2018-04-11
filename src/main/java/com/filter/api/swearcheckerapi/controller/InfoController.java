@@ -1,27 +1,16 @@
 package com.filter.api.swearcheckerapi.controller;
 
 import com.filter.api.swearcheckerapi.model.User;
-import com.filter.api.swearcheckerapi.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/infos")
 public class InfoController {
-
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "user", method = RequestMethod.GET)
@@ -43,9 +32,10 @@ public class InfoController {
     }
 
    // @PreAuthorize("hasRole('ROLE_TRUSTED_CLIENT')")
-    @PreAuthorize("hasAuthority('ROLE_TRUSTED_CLIENT') and hasAuthority('USER')")
+    @PreAuthorize("hasRole('ROLE_TRUSTED_CLIENT')")
     @RequestMapping(value = "trusted_client", method = RequestMethod.GET)
     public String helloTrustedClient() {
+        System.out.println("here");
         return "hello user authenticated by trusted client";
     }
 

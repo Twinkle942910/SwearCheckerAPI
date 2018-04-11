@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,7 +35,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     private UserDetailsService userDetailsService;
 
     @Autowired
-    @Qualifier("clientDetailsService")
+    @Qualifier("clientDetailsServiceImpl")
     private ClientDetailsService clientDetailsService;
 
     @Autowired
@@ -72,13 +70,14 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer.tokenKeyAccess("isAnonymous() || hasAuthority('USER')")
                 .checkTokenAccess("hasAuthority('USER')")
-                .passwordEncoder(oauthClientPasswordEncoder)
-                .allowFormAuthenticationForClients();
+                .allowFormAuthenticationForClients()
+                .passwordEncoder(oauthClientPasswordEncoder);
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(dataSource);
+        //clients.jdbc(dataSource);
+        clients.withClientDetails(clientDetailsService);
 
         //clients.withClientDetails(clientDetailsService);
 
