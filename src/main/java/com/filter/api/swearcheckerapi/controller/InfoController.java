@@ -32,7 +32,7 @@ public class InfoController {
     }
 
    // @PreAuthorize("hasRole('ROLE_TRUSTED_CLIENT')")
-    @PreAuthorize("hasRole('ROLE_TRUSTED_CLIENT')")
+    @PreAuthorize("hasAuthority('ROLE_TRUSTED_CLIENT')")
     @RequestMapping(value = "trusted_client", method = RequestMethod.GET)
     public String helloTrustedClient() {
         System.out.println("here");

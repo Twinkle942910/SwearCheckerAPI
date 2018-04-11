@@ -14,11 +14,12 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 
 @Configuration
 @EnableAuthorizationServer
@@ -42,15 +43,11 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Qualifier("dataSource")
     private DataSource dataSource;
 
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        return new JwtAccessTokenConverter();
-    }
+    @Autowired
+    private TokenStore tokenStore;
 
-    @Bean
-    public TokenStore tokenStore() {
-        return new JdbcTokenStore(dataSource);
-    }
+    @Autowired
+    private JwtAccessTokenConverter accessTokenConverter;
 
     @Bean
     public OAuth2AccessDeniedHandler oauthAccessDeniedHandler() {
@@ -59,11 +56,16 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+
+        TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
+        enhancerChain.setTokenEnhancers(Collections.singletonList(accessTokenConverter));
+
         endpoints
-                .tokenStore(tokenStore())
+                .tokenStore(tokenStore)
                 .authenticationManager(this.authenticationManager)
                 .userDetailsService(userDetailsService)
-                .accessTokenConverter(accessTokenConverter());
+                .accessTokenConverter(accessTokenConverter)
+                .tokenEnhancer(enhancerChain);
     }
 
     @Override
