@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/infos")
+@RequestMapping("/swearchecker")
 public class InfoController {
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER') || hasAuthority('USER_CLIENT')")
     @RequestMapping(value = "user", method = RequestMethod.GET)
     public User helloUser() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
@@ -31,7 +31,6 @@ public class InfoController {
         return "hello user authenticated by normal client";
     }
 
-   // @PreAuthorize("hasRole('ROLE_TRUSTED_CLIENT')")
     @PreAuthorize("hasAuthority('ROLE_TRUSTED_CLIENT')")
     @RequestMapping(value = "trusted_client", method = RequestMethod.GET)
     public String helloTrustedClient() {
@@ -51,7 +50,6 @@ public class InfoController {
     }
 
     @RequestMapping(value = "hello", method = RequestMethod.GET)
-   // @PreAuthorize("hasRole('ROLE_USER')")
     @PreAuthorize("hasAuthority('USER')")
     public Object hello() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

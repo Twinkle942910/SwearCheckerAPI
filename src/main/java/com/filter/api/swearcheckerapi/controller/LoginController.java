@@ -96,7 +96,7 @@ public class LoginController {
             modelAndView.addObject("user", new User());
             modelAndView.setViewName("registration");
 
-            String clientId = /*oauthClientPasswordEncoder.encode(*/user.getUsername() + "id"/*)*/;
+            String clientId = user.getUsername() + "id";
             String clientSecret = user.getPassword() + "secret";
 
             ClientDetails client = clientDetailsService.loadClientByClientId(clientId);

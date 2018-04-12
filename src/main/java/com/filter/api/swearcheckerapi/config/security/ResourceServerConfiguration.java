@@ -1,4 +1,4 @@
-package com.filter.api.swearcheckerapi.config;
+package com.filter.api.swearcheckerapi.config.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,7 +16,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     private static final String RESOURCE_ID = "swearchecker-rest-api";
     private static final String SECURED_READ_SCOPE = "#oauth2.hasScope('read')";
     private static final String SECURED_WRITE_SCOPE = "#oauth2.hasScope('write')";
-    private static final String SECURED_PATTERN = "/infos/**";
+    private static final String SECURED_PATTERN = "/swearchecker/**";
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
@@ -36,11 +36,13 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .anyRequest().authenticated();
     }
 
+    /**
+     * Determine if the client request contained an OAuth Authorization (gives 401 code.)
+     * Will autopromt authentication page to enter login and password
+     */
     private static class OAuthRequestedMatcher implements RequestMatcher {
         public boolean matches(HttpServletRequest request) {
             String auth = request.getHeader("Authorization");
-            // Determine if the client request contained an OAuth Authorization (gives 401 code.)
-            //Will autopromt authentication page to enter login and password.
             boolean haveOauth2Token = (auth != null) && auth.startsWith("Bearer");
             boolean haveAccessToken = request.getParameter("access_token") != null;
             return haveOauth2Token || haveAccessToken;

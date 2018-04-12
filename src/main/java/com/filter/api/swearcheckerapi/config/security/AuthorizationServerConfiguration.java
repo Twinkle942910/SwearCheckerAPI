@@ -1,4 +1,4 @@
-package com.filter.api.swearcheckerapi.config;
+package com.filter.api.swearcheckerapi.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -78,25 +78,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        //clients.jdbc(dataSource);
         clients.withClientDetails(clientDetailsService);
-
-        //clients.withClientDetails(clientDetailsService);
-
- /*       clients.inMemory()
-                .withClient("normal-app")
-                .authorizedGrantTypes("authorization_code", "implicit")
-                .authorities("ROLE_CLIENT")
-                .scopes("read", "write")
-                .resourceIds(RESOURCE_ID)
-                .accessTokenValiditySeconds(accessTokenValiditySeconds)
-                .and()
-                .withClient("trusted-app")
-                .authorizedGrantTypes("client_credentials", "password")
-                .authorities("ROLE_TRUSTED_CLIENT")
-                .scopes("read", "write")
-                .resourceIds(RESOURCE_ID)
-                .accessTokenValiditySeconds(accessTokenValiditySeconds)
-                .secret("$2a$04$Ey0N3nJ5Q6eVlpHFkTpp9.mWYG1ToEr45IRSO/lYPkKvA0dGcv1Bm");*/
     }
 }

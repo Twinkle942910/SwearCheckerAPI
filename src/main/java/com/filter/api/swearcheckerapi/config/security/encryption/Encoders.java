@@ -1,4 +1,4 @@
-package com.filter.api.swearcheckerapi.config.encryption;
+package com.filter.api.swearcheckerapi.config.security.encryption;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

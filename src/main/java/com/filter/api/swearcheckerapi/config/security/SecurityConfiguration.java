@@ -1,4 +1,4 @@
-package com.filter.api.swearcheckerapi.config;
+package com.filter.api.swearcheckerapi.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -92,7 +92,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public TokenStore tokenStore() {
-      //  return new JdbcTokenStore(dataSource);
+        //  return new JdbcTokenStore(dataSource);
         return new InMemoryTokenStore();
     }
 
