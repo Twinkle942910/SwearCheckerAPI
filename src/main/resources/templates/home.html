@@ -21,10 +21,16 @@
 		<div class="panel-group" style="margin-top:40px">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<span th:utext="${client_id}"></span>
-					<span th:utext="${client_secret}"></span>
+					<span>Client credentials</span>
 				</div>
-				<p class="admin-message-text text-center" th:utext="${client_id}"></p>
+				<h1 class="client-id-title text-left" style="font-size:23px;font-weight:bold;margin-left:20px;margin-top:10px">client_id</h1>
+				<p class="client-id-value text-left" th:utext="${client_id}" style="font-size:20px;font-weight:light;margin-left:20px;margin-top:10px"></p>
+
+				<h1>
+				</h1>
+
+				<h1 class="client-secret-title text-left" style="font-size:23px;font-weight:bold;margin-left:20px;margin-top:10px">client_secret</h1>
+				<p class="client-secret-value text-left" th:utext="${client_secret}" style="font-size:20px;font-weight:light;margin-left:20px;margin-top:10px"></p>
 			</div>
 		</div>
 		

@@ -49,9 +49,11 @@ public class LoginController {
     public ModelAndView home(){
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-      /*  ClientDetails client = clientDetailsService.loadClientByClientId(auth.getName());
+        UserDetails user = userService.loadUserByUsername(auth.getName());
+        ClientDetails client = clientDetailsService.loadClientByClientId(user.getUsername() + "id");
+
         modelAndView.addObject("client_id", client.getClientId());
-        modelAndView.addObject("client_secret", client.getClientSecret());*/
+        modelAndView.addObject("client_secret", client.getClientSecret());
         modelAndView.setViewName("home");
         return modelAndView;
     }
@@ -85,6 +87,7 @@ public class LoginController {
             modelAndView.setViewName("registration");
         } else {
 
+            user.setEnabled(true);
             user.setPassword(userPasswordEncoder.encode(user.getPassword()));
             user.getAuthorities().add(new Authority(2L, "USER"));
 
@@ -93,7 +96,7 @@ public class LoginController {
             modelAndView.addObject("user", new User());
             modelAndView.setViewName("registration");
 
-            String clientId = oauthClientPasswordEncoder.encode(user.getUsername() + "id");
+            String clientId = /*oauthClientPasswordEncoder.encode(*/user.getUsername() + "id"/*)*/;
             String clientSecret = user.getPassword() + "secret";
 
             ClientDetails client = clientDetailsService.loadClientByClientId(clientId);
