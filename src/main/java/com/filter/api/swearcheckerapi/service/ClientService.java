@@ -21,9 +21,9 @@ public class ClientService implements ClientDetailsService {
         ClientDetails clientDetails = clientRepository.findByClientId(clientId);
 
         if (clientDetails == null) {
-            throw new UsernameNotFoundException(String.format("ClientDetails %s does not exist!", clientId));
+            return null;
+            //throw new UsernameNotFoundException(String.format("ClientDetails %s does not exist!", clientId));
         }
-
         return new BaseClientDetails(clientDetails);
     }
 

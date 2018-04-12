@@ -77,7 +77,10 @@ public class Client implements ClientDetails {
 
     @Override
     public Set<String> getAuthorizedGrantTypes() {
-        return new HashSet<>(Arrays.asList(grantTypes.split(",")));
+        if(!grantTypes.isEmpty()) {
+            return new HashSet<>(Arrays.asList(grantTypes.split(",")));
+        }
+        return new HashSet<>();
     }
 
     @Override

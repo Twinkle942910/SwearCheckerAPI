@@ -25,8 +25,13 @@ public class UserService implements UserDetailsService {
         }
 
         throw new UsernameNotFoundException(username);*/
-
-        return org.springframework.security.core.userdetails.User.withUserDetails(userRepository.findByUsername(username)).build();
+        User user = userRepository.findByUsername(username);
+        if(user != null){
+            return org.springframework.security.core.userdetails.User.withUserDetails(user).build();
+        }
+        else {
+            return null;
+        }
     }
 
     public void save(User user) {

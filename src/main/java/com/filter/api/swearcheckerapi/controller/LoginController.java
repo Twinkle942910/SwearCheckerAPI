@@ -1,10 +1,13 @@
 package com.filter.api.swearcheckerapi.controller;
 
 import com.filter.api.swearcheckerapi.model.Authority;
+import com.filter.api.swearcheckerapi.model.Client;
 import com.filter.api.swearcheckerapi.model.User;
+import com.filter.api.swearcheckerapi.service.ClientService;
 import com.filter.api.swearcheckerapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,13 +39,19 @@ public class LoginController {
     @Autowired
     private PasswordEncoder oauthClientPasswordEncoder;
 
+    @Value("${security.jwt.access-token-validity}")
+    private int accessTokenValidity;
+
+    @Value("${security.jwt.refresh-token-validity}")
+    private int refreshTokenValidity;
+
     @RequestMapping(value={"/", "/home"}, method = RequestMethod.GET)
     public ModelAndView home(){
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        ClientDetails client = clientDetailsService.loadClientByClientId(auth.getName());
+      /*  ClientDetails client = clientDetailsService.loadClientByClientId(auth.getName());
         modelAndView.addObject("client_id", client.getClientId());
-        modelAndView.addObject("client_secret", client.getClientSecret());
+        modelAndView.addObject("client_secret", client.getClientSecret());*/
         modelAndView.setViewName("home");
         return modelAndView;
     }
@@ -83,6 +92,24 @@ public class LoginController {
             modelAndView.addObject("successMessage", "User has been registered successfully");
             modelAndView.addObject("user", new User());
             modelAndView.setViewName("registration");
+
+            String clientId = oauthClientPasswordEncoder.encode(user.getUsername() + "id");
+            String clientSecret = user.getPassword() + "secret";
+
+            ClientDetails client = clientDetailsService.loadClientByClientId(clientId);
+            if(client == null){
+                Client clientSimple = new Client();
+                clientSimple.setClientId(clientId);
+                clientSimple.setClientSecret(oauthClientPasswordEncoder.encode(clientSecret));
+                clientSimple.setScope("read,write");
+                clientSimple.setAccessTokenValidity(accessTokenValidity);
+                clientSimple.setRefreshTokenValidity((long) refreshTokenValidity);
+                clientSimple.setAuthorities("USER_CLIENT");
+                clientSimple.setResourceIds("swearchecker-rest-api");
+                clientSimple.setGrantTypes("client_credentials,password,refresh_token");
+
+                ((ClientService)clientDetailsService).save(clientSimple);
+            }
 
         }
         return modelAndView;
