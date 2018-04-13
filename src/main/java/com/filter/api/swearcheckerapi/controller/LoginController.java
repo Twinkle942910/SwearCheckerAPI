@@ -53,7 +53,7 @@ public class LoginController {
         ClientDetails client = clientDetailsService.loadClientByClientId(user.getUsername() + "id");
 
         modelAndView.addObject("client_id", client.getClientId());
-        modelAndView.addObject("client_secret", client.getClientSecret());
+        modelAndView.addObject("client_secret", user.getPassword() + "secret");
         modelAndView.setViewName("home");
         return modelAndView;
     }
