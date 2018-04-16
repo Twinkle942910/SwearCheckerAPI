@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 
-//TODO: change multiple parameters to methods.
+//TODO: refactor these multiple parameters.
+//TODO: implement white list and black list.
 @PreAuthorize("hasAuthority('USER') || hasAuthority('USER_CLIENT')")
 @Service("filterService")
 public class TextFilterServiceImpl implements TextFilterService {
@@ -19,9 +20,7 @@ public class TextFilterServiceImpl implements TextFilterService {
 
     @Override
     public boolean isProfane(String phrase, Language language) {
-        if (textFilter.checkLanguage() != language) {
-            textFilter.changeLanguage(language);
-        }
+        changeLanguage(language);
 
         return textFilter.isProfane(phrase);
     }
@@ -29,18 +28,7 @@ public class TextFilterServiceImpl implements TextFilterService {
     @Override
     public List<String> checkWord(String word, Language language, boolean doPreproccessing,
                                   boolean removeRepeatedLetters, float maxMatchPercentage, int suggestionLimit) {
-        if (textFilter.checkLanguage() != language) {
-            textFilter.changeLanguage(language);
-        }
-        textFilter.doPreproccessing(doPreproccessing);
-        textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
-        if (maxMatchPercentage != 0.0) {
-            textFilter.setMaxMatchPercentage(maxMatchPercentage);
-        }
-
-        if (suggestionLimit != 0) {
-            textFilter.setSuggestionLimit(suggestionLimit);
-        }
+        spellcheckConfig(language, doPreproccessing, removeRepeatedLetters, maxMatchPercentage, suggestionLimit);
 
         return textFilter.checkWord(word);
     }
@@ -48,19 +36,7 @@ public class TextFilterServiceImpl implements TextFilterService {
     @Override
     public List<String> checkCompound(String compound, Language language, boolean doPreproccessing,
                                       boolean removeRepeatedLetters, float maxMatchPercentage, int suggestionLimit) {
-        if (textFilter.checkLanguage() != language) {
-            textFilter.changeLanguage(language);
-        }
-        textFilter.doPreproccessing(doPreproccessing);
-        textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
-        if (maxMatchPercentage != 0.0) {
-            textFilter.setMaxMatchPercentage(maxMatchPercentage);
-        }
-
-        if (suggestionLimit != 0) {
-            textFilter.setSuggestionLimit(suggestionLimit);
-        }
-
+        spellcheckConfig(language, doPreproccessing, removeRepeatedLetters, maxMatchPercentage, suggestionLimit);
         return textFilter.checkCompound(compound);
     }
 
@@ -69,9 +45,7 @@ public class TextFilterServiceImpl implements TextFilterService {
                             boolean removeRepeatedLetters, boolean checkForCompounds,
                             boolean keepUnrecognized, float maxMatchPercentage, int suggestionLimit) {
 
-        if (textFilter.checkLanguage() != language) {
-            textFilter.changeLanguage(language);
-        }
+        changeLanguage(language);
         textFilter.doPreproccessing(doPreproccessing);
         textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
         textFilter.doCheckCompounds(checkForCompounds);
@@ -92,71 +66,31 @@ public class TextFilterServiceImpl implements TextFilterService {
                          boolean removeRepeatedLetters, boolean checkForCompounds, boolean removeOrReplace,
                          boolean doSpellcheck) {
 
-        if (textFilter.checkLanguage() != language) {
-            textFilter.changeLanguage(language);
-        }
-        textFilter.doPreproccessing(doPreproccessing);
-        textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
-        textFilter.doCheckCompounds(checkForCompounds);
-
-        if (checkForCompounds) {
-            text = textFilter.checkText(text);
-        }
-
-        textFilter.doRemoveProfaneWord(removeOrReplace);
-
-        if (!replacement.equals("")) {
-            textFilter.setProfanityReplacement(replacement);
-        }
-
-        if (doSpellcheck && !checkForCompounds) {
-            text = textFilter.checkText(text);
-        }
-
+        text = profanityFilterConfig(text, language, replacement, doPreproccessing, removeRepeatedLetters,
+                checkForCompounds, removeOrReplace, doSpellcheck);
         return textFilter.censor(text);
     }
+
 
     @Override
     public Censored searchForProfanity(String text, Language language, String replacement,
                                        boolean doPreproccessing, boolean removeRepeatedLetters,
                                        boolean checkForCompounds, boolean removeOrReplace, boolean doSpellcheck) {
-        if (textFilter.checkLanguage() != language) {
-            textFilter.changeLanguage(language);
-        }
-        textFilter.doPreproccessing(doPreproccessing);
-        textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
-        textFilter.doCheckCompounds(checkForCompounds);
 
-        if (checkForCompounds) {
-            text = textFilter.checkText(text);
-        }
-
-        textFilter.doRemoveProfaneWord(removeOrReplace);
-
-        if (!replacement.equals("")) {
-            textFilter.setProfanityReplacement(replacement);
-        }
-
-        if (doSpellcheck && !checkForCompounds) {
-            text = textFilter.checkText(text);
-        }
-
+        text = profanityFilterConfig(text, language, replacement, doPreproccessing, removeRepeatedLetters,
+                checkForCompounds, removeOrReplace, doSpellcheck);
         return textFilter.searchForProfanity(text);
     }
 
     @Override
     public String preproccess(String text, Language language, boolean removeRepeatedLetters) {
-        if (textFilter.checkLanguage() != language) {
-            textFilter.changeLanguage(language);
-        }
+        changeLanguage(language);
         return textFilter.preproccess(text, removeRepeatedLetters);
     }
 
     @Override
     public boolean isValid(String word, Language language) {
-        if (textFilter.checkLanguage() != language) {
-            textFilter.changeLanguage(language);
-        }
+        changeLanguage(language);
         return textFilter.isValid(word);
     }
 
@@ -188,5 +122,49 @@ public class TextFilterServiceImpl implements TextFilterService {
     @Override
     public Set<String> getWhiteList() {
         return null;
+    }
+
+    private void changeLanguage(Language language) {
+        if (textFilter.checkLanguage() != language) {
+            textFilter.changeLanguage(language);
+        }
+    }
+
+    private void spellcheckConfig(Language language, boolean doPreproccessing, boolean removeRepeatedLetters,
+                                  float maxMatchPercentage, int suggestionLimit) {
+        changeLanguage(language);
+        textFilter.doPreproccessing(doPreproccessing);
+        textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
+        if (maxMatchPercentage != 0.0) {
+            textFilter.setMaxMatchPercentage(maxMatchPercentage);
+        }
+
+        if (suggestionLimit != 0) {
+            textFilter.setSuggestionLimit(suggestionLimit);
+        }
+    }
+
+    private String profanityFilterConfig(String text, Language language, String replacement, boolean doPreproccessing,
+                                         boolean removeRepeatedLetters, boolean checkForCompounds, boolean removeOrReplace,
+                                         boolean doSpellcheck) {
+        changeLanguage(language);
+        textFilter.doPreproccessing(doPreproccessing);
+        textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
+        textFilter.doCheckCompounds(checkForCompounds);
+
+        if (checkForCompounds) {
+            text = textFilter.checkText(text);
+        }
+
+        textFilter.doRemoveProfaneWord(removeOrReplace);
+
+        if (!replacement.equals("")) {
+            textFilter.setProfanityReplacement(replacement);
+        }
+
+        if (doSpellcheck && !checkForCompounds) {
+            text = textFilter.checkText(text);
+        }
+        return text;
     }
 }
