@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 
@@ -44,9 +46,49 @@ public class TextFilterController {
                 removeRepeatedLetters, checkForCompounds, removeOrReplace, doSpellcheck);
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST,
-            reason = "Wrong language input")
+    @RequestMapping(value = "is_profane", method = RequestMethod.GET,
+            consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE},
+            produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
+    public boolean isProfane(@RequestParam("text") String text,
+                             @RequestParam("language") String language) throws InvalidParameterException {
+
+        if (!Language.contains(language)) {
+            throw new InvalidParameterException("There is no such language - " + language);
+        }
+
+        return textFilterService.isProfane(text, Language.fromString(language));
+    }
+
+    @RequestMapping(value = "check_word", method = RequestMethod.GET,
+            consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE},
+            produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
+    public List<String> checkWord(@RequestParam("text") String text,
+                                  @RequestParam("language") String language,
+                                  @RequestParam(value = "preproccessing", required = false) boolean doPreproccessing,
+                                  @RequestParam(value = "remove_repeated_letters", required = false) boolean removeRepeatedLetters,
+                                  @RequestParam(value = "match_percentage", required = false, defaultValue = "0.0") float maxMatchPercentage,
+                                  @RequestParam(value = "suggestion_limit", required = false, defaultValue = "0") int suggestionLimit)
+            throws InvalidParameterException {
+
+        if (text.split(" ").length > 1) {
+            throw new InvalidParameterException("It cannot be more than 1 word here. Number of words = " + text.split(" ").length);
+        }
+
+        if (!Language.contains(language)) {
+            throw new InvalidParameterException("There is no such language - " + language);
+        }
+
+        return textFilterService.checkWord(text, Language.fromString(language), doPreproccessing,
+                removeRepeatedLetters, maxMatchPercentage, suggestionLimit);
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Wrong language input")
     @ExceptionHandler(InvalidParameterException.class)
     public void languageParameterError() {
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Wrong type of text input")
+    @ExceptionHandler(InvalidParameterException.class)
+    public void wordError() {
     }
 }

@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface TextFilterService {
-    boolean isProfane(String phrase, Language language, boolean doPreproccessing,
-                      boolean removeRepeatedLetters, boolean checkForCompounds);
+    boolean isProfane(String phrase, Language language);
 
     List<String> checkWord(String word, Language language, boolean doPreproccessing,
                            boolean removeRepeatedLetters, float maxMatchPercentage, int suggestionLimit);

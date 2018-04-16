@@ -18,12 +18,10 @@ public class TextFilterServiceImpl implements TextFilterService {
     private Filter textFilter;
 
     @Override
-    public boolean isProfane(String phrase, Language language, boolean doPreproccessing,
-                             boolean removeRepeatedLetters, boolean checkForCompounds) {
-        textFilter.changeLanguage(language);
-        textFilter.doPreproccessing(doPreproccessing);
-        textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
-        textFilter.doCheckCompounds(checkForCompounds);
+    public boolean isProfane(String phrase, Language language) {
+        if (textFilter.checkLanguage() != language) {
+            textFilter.changeLanguage(language);
+        }
 
         return textFilter.isProfane(phrase);
     }
@@ -31,11 +29,18 @@ public class TextFilterServiceImpl implements TextFilterService {
     @Override
     public List<String> checkWord(String word, Language language, boolean doPreproccessing,
                                   boolean removeRepeatedLetters, float maxMatchPercentage, int suggestionLimit) {
-        textFilter.changeLanguage(language);
+        if (textFilter.checkLanguage() != language) {
+            textFilter.changeLanguage(language);
+        }
         textFilter.doPreproccessing(doPreproccessing);
         textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
-        textFilter.setMaxMatchPercentage(maxMatchPercentage);
-        textFilter.setSuggestionLimit(suggestionLimit);
+        if (maxMatchPercentage != 0.0) {
+            textFilter.setMaxMatchPercentage(maxMatchPercentage);
+        }
+
+        if (suggestionLimit != 0) {
+            textFilter.setSuggestionLimit(suggestionLimit);
+        }
 
         return textFilter.checkWord(word);
     }
@@ -43,7 +48,9 @@ public class TextFilterServiceImpl implements TextFilterService {
     @Override
     public List<String> checkCompound(String compound, Language language, boolean doPreproccessing,
                                       boolean removeRepeatedLetters, float maxMatchPercentage, int suggestionLimit) {
-        textFilter.changeLanguage(language);
+        if (textFilter.checkLanguage() != language) {
+            textFilter.changeLanguage(language);
+        }
         textFilter.doPreproccessing(doPreproccessing);
         textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
         textFilter.setMaxMatchPercentage(maxMatchPercentage);
@@ -57,7 +64,9 @@ public class TextFilterServiceImpl implements TextFilterService {
                             boolean removeRepeatedLetters, boolean checkForCompounds,
                             boolean keepUnrecognized, float maxMatchPercentage, int suggestionLimit) {
 
-        textFilter.changeLanguage(language);
+        if (textFilter.checkLanguage() != language) {
+            textFilter.changeLanguage(language);
+        }
         textFilter.doPreproccessing(doPreproccessing);
         textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
         textFilter.doCheckCompounds(checkForCompounds);
@@ -73,8 +82,9 @@ public class TextFilterServiceImpl implements TextFilterService {
                          boolean removeRepeatedLetters, boolean checkForCompounds, boolean removeOrReplace,
                          boolean doSpellcheck) {
 
-        //TODO: if filters language is same, then don't change.
-        textFilter.changeLanguage(language);
+        if (textFilter.checkLanguage() != language) {
+            textFilter.changeLanguage(language);
+        }
         textFilter.doPreproccessing(doPreproccessing);
         textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
         textFilter.doCheckCompounds(checkForCompounds);
@@ -100,14 +110,24 @@ public class TextFilterServiceImpl implements TextFilterService {
     public Censored searchForProfanity(String text, Language language, String replacement,
                                        boolean doPreproccessing, boolean removeRepeatedLetters,
                                        boolean checkForCompounds, boolean removeOrReplace, boolean doSpellcheck) {
-        textFilter.changeLanguage(language);
+        if (textFilter.checkLanguage() != language) {
+            textFilter.changeLanguage(language);
+        }
         textFilter.doPreproccessing(doPreproccessing);
         textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
         textFilter.doCheckCompounds(checkForCompounds);
-        textFilter.setProfanityReplacement(replacement);
+
+        if (checkForCompounds) {
+            text = textFilter.checkText(text);
+        }
+
         textFilter.doRemoveProfaneWord(removeOrReplace);
 
-        if (doSpellcheck) {
+        if (!replacement.equals("")) {
+            textFilter.setProfanityReplacement(replacement);
+        }
+
+        if (doSpellcheck && !checkForCompounds) {
             text = textFilter.checkText(text);
         }
 
@@ -116,13 +136,17 @@ public class TextFilterServiceImpl implements TextFilterService {
 
     @Override
     public String preproccess(String text, Language language, boolean removeRepeatedLetters) {
-        textFilter.changeLanguage(language);
+        if (textFilter.checkLanguage() != language) {
+            textFilter.changeLanguage(language);
+        }
         return textFilter.preproccess(text, removeRepeatedLetters);
     }
 
     @Override
     public boolean isValid(String word, Language language) {
-        textFilter.changeLanguage(language);
+        if (textFilter.checkLanguage() != language) {
+            textFilter.changeLanguage(language);
+        }
         return textFilter.isValid(word);
     }
 
