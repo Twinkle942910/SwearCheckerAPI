@@ -1,4 +1,4 @@
-package com.filter.api.swearcheckerapi;
+package com.filter.api.swearcheckerapi.config.security;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
