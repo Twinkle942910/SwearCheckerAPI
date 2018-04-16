@@ -53,8 +53,13 @@ public class TextFilterServiceImpl implements TextFilterService {
         }
         textFilter.doPreproccessing(doPreproccessing);
         textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
-        textFilter.setMaxMatchPercentage(maxMatchPercentage);
-        textFilter.setSuggestionLimit(suggestionLimit);
+        if (maxMatchPercentage != 0.0) {
+            textFilter.setMaxMatchPercentage(maxMatchPercentage);
+        }
+
+        if (suggestionLimit != 0) {
+            textFilter.setSuggestionLimit(suggestionLimit);
+        }
 
         return textFilter.checkCompound(compound);
     }
@@ -70,9 +75,14 @@ public class TextFilterServiceImpl implements TextFilterService {
         textFilter.doPreproccessing(doPreproccessing);
         textFilter.doRemoveRepeatedLetters(removeRepeatedLetters);
         textFilter.doCheckCompounds(checkForCompounds);
-        textFilter.setMaxMatchPercentage(maxMatchPercentage);
+        if (maxMatchPercentage != 0.0) {
+            textFilter.setMaxMatchPercentage(maxMatchPercentage);
+        }
+
+        if (suggestionLimit != 0) {
+            textFilter.setSuggestionLimit(suggestionLimit);
+        }
         textFilter.keepUnrecognized(keepUnrecognized);
-        textFilter.setSuggestionLimit(suggestionLimit);
 
         return textFilter.checkText(text);
     }

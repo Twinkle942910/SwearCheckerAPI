@@ -2,6 +2,7 @@ package com.filter.api.swearcheckerapi.controller;
 
 import com.filter.api.swearcheckerapi.exception.InvalidParameterException;
 import com.filter.api.swearcheckerapi.service.TextFilterService;
+import com.filter.textcorrector.profanity_filtering.model.Censored;
 import com.filter.textcorrector.spellchecking.Language;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -80,6 +81,99 @@ public class TextFilterController {
 
         return textFilterService.checkWord(text, Language.fromString(language), doPreproccessing,
                 removeRepeatedLetters, maxMatchPercentage, suggestionLimit);
+    }
+
+    @RequestMapping(value = "check_compound", method = RequestMethod.GET,
+            consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE},
+            produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
+    public List<String> checkCompound(@RequestParam("text") String text,
+                                      @RequestParam("language") String language,
+                                      @RequestParam(value = "preproccessing", required = false) boolean doPreproccessing,
+                                      @RequestParam(value = "remove_repeated_letters", required = false) boolean removeRepeatedLetters,
+                                      @RequestParam(value = "match_percentage", required = false, defaultValue = "0.0") float maxMatchPercentage,
+                                      @RequestParam(value = "suggestion_limit", required = false, defaultValue = "0") int suggestionLimit)
+            throws InvalidParameterException {
+
+        if (!Language.contains(language)) {
+            throw new InvalidParameterException("There is no such language - " + language);
+        }
+
+        return textFilterService.checkCompound(text, Language.fromString(language), doPreproccessing,
+                removeRepeatedLetters, maxMatchPercentage, suggestionLimit);
+    }
+
+    @RequestMapping(value = "check_text", method = RequestMethod.GET,
+            consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE},
+            produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
+    public String checkText(@RequestParam("text") String text,
+                            @RequestParam("language") String language,
+                            @RequestParam(value = "preproccessing", required = false) boolean doPreproccessing,
+                            @RequestParam(value = "remove_repeated_letters", required = false) boolean removeRepeatedLetters,
+                            @RequestParam(value = "check_for_compounds", required = false) boolean checkForCompounds,
+                            @RequestParam(value = "keep_unrecognized", required = false, defaultValue = "true") boolean keepUnrecognized,
+                            @RequestParam(value = "match_percentage", required = false, defaultValue = "0.0") float maxMatchPercentage,
+                            @RequestParam(value = "suggestion_limit", required = false, defaultValue = "0") int suggestionLimit)
+            throws InvalidParameterException {
+
+        if (!Language.contains(language)) {
+            throw new InvalidParameterException("There is no such language - " + language);
+        }
+
+        return textFilterService.checkText(text, Language.fromString(language), doPreproccessing,
+                removeRepeatedLetters, checkForCompounds, keepUnrecognized, maxMatchPercentage, suggestionLimit);
+    }
+
+    @RequestMapping(value = "search_profanity", method = RequestMethod.GET,
+            consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE},
+            produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
+    public Censored searcForProfanity(@RequestParam("text") String text,
+                                      @RequestParam("language") String language,
+                                      @RequestParam(value = "replacement", required = false, defaultValue = "") String replacement,
+                                      @RequestParam(value = "preproccessing", required = false) boolean doPreproccessing,
+                                      @RequestParam(value = "remove_repeated_letters", required = false) boolean removeRepeatedLetters,
+                                      @RequestParam(value = "check_for_compounds", required = false) boolean checkForCompounds,
+                                      @RequestParam(value = "remove", required = false) boolean removeOrReplace,
+                                      @RequestParam(value = "spellcheck", required = false) boolean doSpellcheck) throws InvalidParameterException {
+
+        if (!Language.contains(language)) {
+            throw new InvalidParameterException("There is no such language - " + language);
+        }
+
+        return textFilterService.searchForProfanity(text, Language.fromString(language), replacement, doPreproccessing,
+                removeRepeatedLetters, checkForCompounds, removeOrReplace, doSpellcheck);
+    }
+
+    @RequestMapping(value = "preproccess", method = RequestMethod.GET,
+            consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE},
+            produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
+    public String preproccess(@RequestParam("text") String text,
+                              @RequestParam("language") String language,
+                              @RequestParam(value = "remove_repeated_letters", required = false) boolean removeRepeatedLetters)
+            throws InvalidParameterException {
+
+        if (!Language.contains(language)) {
+            throw new InvalidParameterException("There is no such language - " + language);
+        }
+
+        return textFilterService.preproccess(text, Language.fromString(language), removeRepeatedLetters);
+    }
+
+    @RequestMapping(value = "is_valid", method = RequestMethod.GET,
+            consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE},
+            produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
+    public boolean isValid(@RequestParam("text") String text,
+                           @RequestParam("language") String language)
+            throws InvalidParameterException {
+
+        if (text.split(" ").length > 1) {
+            throw new InvalidParameterException("It cannot be more than 1 word here. Number of words = " + text.split(" ").length);
+        }
+
+        if (!Language.contains(language)) {
+            throw new InvalidParameterException("There is no such language - " + language);
+        }
+
+        return textFilterService.isValid(text, Language.fromString(language));
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Wrong language input")
