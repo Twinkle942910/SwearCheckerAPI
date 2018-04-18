@@ -26,6 +26,8 @@
         <spring-security-oauth2.version>2.3.0.RELEASE</spring-security-oauth2.version>
         <junit.version>4.12</junit.version>
         <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
+
+        <docker.image.prefix>twinkle94</docker.image.prefix>
     </properties>
 
     <dependencies>
@@ -158,6 +160,19 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.3.6</version>
+                <configuration>
+                   <!-- <dockerConfigFile>${project.basedir}/src/main/docker</dockerConfigFile>-->
+                    <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>
