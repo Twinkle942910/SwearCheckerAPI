@@ -28,6 +28,8 @@
         <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
 
         <docker.image.prefix>twinkle94</docker.image.prefix>
+
+        <docker.baseDir>src/main/docker</docker.baseDir>
     </properties>
 
     <dependencies>
@@ -172,7 +174,7 @@
                     </buildArgs>
 
                     <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
-                    <dockerDirectory>src/main/docker</dockerDirectory>
+                    <dockerDirectory>${docker.baseDir}</dockerDirectory>
                     <resources>
                         <resource>
                          <!--   <username>twinkle94</username>
@@ -180,6 +182,11 @@
                             <targetPath>/</targetPath>
                             <directory>${project.build.directory}</directory>
                             <include>${project.build.finalName}.jar</include>
+                        </resource>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${docker.baseDir}</directory>
+                            <include>wrapper.sh</include>
                         </resource>
                     </resources>
                 </configuration>

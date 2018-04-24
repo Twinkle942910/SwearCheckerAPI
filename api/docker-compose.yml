@@ -1,0 +1,21 @@
+version: '2.1'
+
+services:
+  client-db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=Twinkle_203
+      - MYSQL_DATABASE=swearchecker_db
+      - MYSQL_PASSWORD=Twinkle_203
+  swearchecker-api-docker:
+    image: twinkle94/api
+    depends_on:
+      - client-db
+    ports:
+      - 8080:8080
+    environment:
+      - DATABASE_HOST=client-db
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=Twinkle_203
+      - DATABASE_NAME=swearchecker_db
+      - DATABASE_PORT=3306
