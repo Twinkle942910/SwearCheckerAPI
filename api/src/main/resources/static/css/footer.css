@@ -1,0 +1,16 @@
+#footerNav {
+  background-color: #292c2f;
+  box-shadow: 0 1px 1px #ccc;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  width: 100%; }
+  #footerNav p {
+    font: 16px Roboto Light, Arial, Helvetica, sans-serif;
+    padding: 27px 15px;
+    height: 60px;
+    float: center;
+    color: #ffffff;
+    text-align: center; }
+
+/*# sourceMappingURL=footer.css.map */

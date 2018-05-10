@@ -1,0 +1,135 @@
+.header-container{
+	background-color:#292c2f;
+	box-shadow:0 1px 1px #ccc;
+	padding: 20px 40px;
+	height: 80px;
+	color: #ffffff;
+	box-sizing: border-box;
+
+
+	.header-content {
+		max-width: 1200px;
+		text-align: center;
+		margin: 0 auto;
+
+		/* Logo */
+
+		h1{
+			float: left;
+			font: normal 28px Cookie, Arial, Helvetica, sans-serif;
+			line-height: 40px;
+			margin: 0;
+		}
+
+		/* The navigation links */
+
+		a {
+			color: #ffffff;
+			text-decoration: none;
+		}
+
+		nav {
+			font:16px Roboto, Arial, Helvetica, sans-serif;
+			line-height: 40px;
+			float: left;
+			margin: 0 0 0 60px;
+			padding: 0;
+
+			a{
+				font-size: 18px;
+				display: inline-block;
+				padding: 0 5px;
+				opacity: 0.9;
+				text-decoration:none;
+				line-height: 1;
+			}
+
+			a:hover {
+				opacity: 3;
+			}
+
+			a.selected {
+				color: #608bd2;
+			}
+
+		}
+
+		/* Login/Sign up buttons */
+
+		ul {
+			font: 16px Roboto, Arial, Helvetica, sans-serif;
+			list-style: none;
+			line-height: 1;
+			float: right;
+
+			li {
+				display: inline-block;
+				margin-left: 15px;
+				opacity:0.9;
+			}
+
+			li:hover{
+				opacity: 1;
+			}
+
+			/* The sign up button */
+
+			li:last-child a {
+				font-weight: bold;
+				background-color: #3a3c3e;
+				padding: 15px 15px;
+				border-radius: 3px;
+			}
+		}
+	}
+}
+
+/* Logout button */
+
+#logout{
+	font: 16px Roboto, Arial, Helvetica, sans-serif;
+	list-style: none;
+	line-height: 1;
+	padding: 10px 15px;
+	border-radius: 3px;
+	float: right;
+}
+
+/* Making the header responsive */
+
+@media all and (max-width: 600px) {
+
+	.header-container {
+		padding: 25px;
+		height: 85px;
+
+		.header-content{
+			h1 {
+				float: none;
+				margin: -8px 0 2px;
+				text-align: center;
+				font-size: 24px;
+				line-height: 1;
+			}
+
+			nav{
+				li{
+					a {
+						font-size: 13px;
+					}
+				}
+			}
+
+			ul {
+				display: none;
+			}
+		}
+	}
+}
+
+/* For the headers to look good, be sure to reset the margin and padding of the body */
+
+body {
+	margin:0;
+	padding:0;
+}

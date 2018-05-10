@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-xmlns:th="http://www.thymeleaf.org">
+xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 
@@ -12,6 +12,7 @@ xmlns:th="http://www.thymeleaf.org">
 
 	<link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
 	<link rel="stylesheet" type="text/css" th:href="@{/css/home-content.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
 	<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -20,9 +21,9 @@ xmlns:th="http://www.thymeleaf.org">
 
 <body>
 
-	<header class="header-login-signup">
+	<header class="header-container">
 
-		<div class="header-limiter">
+		<div class="header-content">
 
 			<h1><a href="#">CheckMateFilter</a></h1>
 
@@ -32,10 +33,14 @@ xmlns:th="http://www.thymeleaf.org">
 				<a href="#">Contacts</a>
 			</nav>
 
-			<ul>
-				<li><a href="#">Sign in</a></li>
-				<li><a href="#">Sign up</a></li>
+			<ul class="singup" sec:authorize="isAnonymous()">
+				<li><a th:href="@{/login}">Sign in</a></li>
+				<li><a th:href="@{/registration}">Sign up</a></li>
 			</ul>
+
+			<div id="logout" sec:authorize="isAuthenticated()">
+				<a th:href="@{/logout}">Log Out</a>
+			</div>
 
 		</div>
 
@@ -43,29 +48,29 @@ xmlns:th="http://www.thymeleaf.org">
 
 
 	<div class="content">
-
-		<form th:action="@{/logout}" method="get">
-			<button class="btn btn-md btn-danger btn-block" name="registration"
-			type="Submit">Logout</button>
-		</form>
-		
-		<div class="panel-group" style="margin-top:40px">
+		<div class="panel-group">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<span>Client credentials</span>
 				</div>
-				<h1 class="client-id-title text-left" style="font-size:23px;font-weight:bold;margin-left:20px;margin-top:10px">client_id</h1>
-				<p class="client-id-value text-left" th:utext="${client_id}" style="font-size:20px;font-weight:light;margin-left:20px;margin-top:10px"></p>
+
+				<h1 class="client-id-title text-left">client_id</h1>
+				<p class="client-id-value text-left" th:utext="${client_id}"></p>
 
 				<h1>
 				</h1>
-				<h1 class="client-secret-title text-left" style="font-size:23px;font-weight:bold;margin-left:20px;margin-top:10px">client_secret</h1>
-				<p class="client-secret-value text-left" th:utext="${client_secret}" style="font-size:20px;font-weight:light;margin-left:20px;margin-top:10px"></p>
+
+				<h1 class="client-secret-title text-left">client_secret</h1>
+				<p class="client-secret-value text-left" th:utext="${client_secret}"></p>
 			</div>
 		</div>
 
 	</div>
 
 </body>
+
+<footer id="footerNav">
+	<p>Copyright© Twinkle94</p>
+</footer>
 
 </html>
