@@ -1,22 +1,53 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title>User Page</title>
-<link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>CheckMateFilter Spell checking and profanity filtering library</title>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/home-content.css}">
+	<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 </head>
 
 <body>
-	<div class="container">
-	
+
+	<header class="header-login-signup">
+
+		<div class="header-limiter">
+
+			<h1><a href="#">CheckMateFilter</a></h1>
+
+			<nav>
+				<a href="#">Home</a>
+				<a href="#" class="selected">Keys</a>
+				<a href="#">Contacts</a>
+			</nav>
+
+			<ul>
+				<li><a href="#">Sign in</a></li>
+				<li><a href="#">Sign up</a></li>
+			</ul>
+
+		</div>
+
+	</header>
+
+
+	<div class="content">
+
 		<form th:action="@{/logout}" method="get">
 			<button class="btn btn-md btn-danger btn-block" name="registration"
-				type="Submit">Logout</button>
-		</form>    
+			type="Submit">Logout</button>
+		</form>
 		
 		<div class="panel-group" style="margin-top:40px">
 			<div class="panel panel-primary">
@@ -28,12 +59,13 @@
 
 				<h1>
 				</h1>
-
 				<h1 class="client-secret-title text-left" style="font-size:23px;font-weight:bold;margin-left:20px;margin-top:10px">client_secret</h1>
 				<p class="client-secret-value text-left" th:utext="${client_secret}" style="font-size:20px;font-weight:light;margin-left:20px;margin-top:10px"></p>
 			</div>
 		</div>
-		
+
 	</div>
+
 </body>
+
 </html>

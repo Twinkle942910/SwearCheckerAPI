@@ -173,12 +173,14 @@
                         <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
 
+                    <serverId>docker-hub</serverId>
+                    <registryUrl>https://index.docker.io/v1/</registryUrl>
+
                     <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+
                     <dockerDirectory>${docker.baseDir}</dockerDirectory>
                     <resources>
                         <resource>
-                         <!--   <username>twinkle94</username>
-                            <password>Twinkle200</password>-->
                             <targetPath>/</targetPath>
                             <directory>${project.build.directory}</directory>
                             <include>${project.build.finalName}.jar</include>
@@ -189,6 +191,9 @@
                             <include>wrapper.sh</include>
                         </resource>
                     </resources>
+                    <imageTags>
+                        <imageTag>${project.version}</imageTag>
+                    </imageTags>
                 </configuration>
             </plugin>
         </plugins>
