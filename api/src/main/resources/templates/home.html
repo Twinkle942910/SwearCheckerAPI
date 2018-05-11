@@ -48,19 +48,20 @@ xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/s
 
 
 	<div class="content">
+		<div id="credentials-description-container">
+			<p id="credentials-description">These are client_app credentials to receive an access token via endpoint <span id="token-endpoint-title">'/oauth/token'</span> for using current API.</p>
+		</div>
+
 		<div class="panel-group">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<span>Client credentials</span>
 				</div>
 
-				<h1 class="client-id-title text-left">client_id</h1>
+				<h1 class="client-id-title text-left">client_id:</h1>
 				<p class="client-id-value text-left" th:utext="${client_id}"></p>
 
-				<h1>
-				</h1>
-
-				<h1 class="client-secret-title text-left">client_secret</h1>
+				<h1 class="client-secret-title text-left">client_secret:</h1>
 				<p class="client-secret-value text-left" th:utext="${client_secret}"></p>
 			</div>
 		</div>

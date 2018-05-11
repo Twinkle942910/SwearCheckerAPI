@@ -1,4 +1,4 @@
-@import url('http://fonts.googleapis.com/css?family=Open+Sans:400,700');
+@import url('http://fonts.googleapis.com/css?family=Open+Sans:400,700|Roboto:300|Roboto');
 
 html{
 	background-color: #ffffff;
@@ -12,15 +12,14 @@ body{
 	padding-bottom:60px;
 }
 
-.content{
+.content {
+	//background-color: grey;
 	text-align: center;
-	padding-top: 25px;
+	padding-top: 90px;
 	margin-bottom:200px;
 	min-height:100%;
 	position:relative;
-}
 
-.content {
 	img{
 		opacity: 0.4;
 		margin: 20px auto;
@@ -92,16 +91,21 @@ body{
 	}
 
 	.panel-heading{
-		font: 24px Roboto, Arial, Helvetica, sans-serif;
 		padding: 20px 0px 20px 0px;
 		color: #ffffff;
 		text-align: center;
 		background-color: #608bd2;
 	}
 
-	$credential-text-title-color:#608bd2;
+	$credential-text-title-color:#2366d1;
 	$credential-text-value-color:#292c2f;
-	$credential-background-color:#A9A9A9;
+	$credential-background-color:#e8e8e8;
+
+	.panel-group{
+		font: 24px 'Roboto', Arial, Helvetica, sans-serif;
+		margin: auto;
+		width: 50%;
+	}
 
 	.panel{
 		background-color: $credential-background-color;
@@ -109,7 +113,7 @@ body{
 
 	.client-id-title{
 		font-size:23px;
-		font-weight:bold;
+		font-weight:300;
 		margin-left:20px;
 		margin-top:10px;
 		color: $credential-text-title-color;
@@ -117,32 +121,42 @@ body{
 
 	.client-id-value{
 		font-size:20px;
-		font-weight:light;
+		font-weight:300;
 		margin-left:20px;
 		margin-top:10px;
 		color: $credential-text-value-color;
 	}
 
 	.client-secret-title{
-		font-size:23px;
-		font-weight:bold;
 		margin-left:20px;
 		margin-top:10px;
+		font-size:23px;
+		font-weight:300;
 		color: $credential-text-title-color;
 	}
 
 	.client-secret-value{
 		font-size:20px;
-		font-weight:light;
+		font-weight:300;
 		margin-left:20px;
 		margin-top:10px;
 		color: $credential-text-value-color;
 	}
 
-	.panel-group{
-		margin-top:40px;
+	#credentials-description-container{
+		margin:auto auto 30px auto;
+		font: 28px 'Roboto', Arial, Helvetica, sans-serif;
 		width: 50%;
-		align: center;
+		text-align: left;
+	}
+
+	#credentials-description{
+		color:#464647;
+	}
+
+	#token-endpoint-title{
+		font-weight: 300;
+		color:#5e5e5e;
 	}
 }
 
