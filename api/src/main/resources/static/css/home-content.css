@@ -64,51 +64,11 @@ body {
       line-height: 1;
       outline: none;
       transition: 0.2s ease; }
-  .content .panel-heading {
-    padding: 20px 0px 20px 0px;
-    color: #ffffff;
-    text-align: center;
-    background-color: #608bd2; }
-  .content .panel-group {
-    font: 24px 'Roboto', Arial, Helvetica, sans-serif;
-    margin: auto;
-    width: 50%; }
-  .content .panel {
-    background-color: #e8e8e8; }
-  .content .client-id-title {
-    font-size: 23px;
-    font-weight: 300;
-    margin-left: 20px;
-    margin-top: 10px;
-    color: #2366d1; }
-  .content .client-id-value {
-    font-size: 20px;
-    font-weight: 300;
-    margin-left: 20px;
-    margin-top: 10px;
-    color: #292c2f; }
-  .content .client-secret-title {
-    margin-left: 20px;
-    margin-top: 10px;
-    font-size: 23px;
-    font-weight: 300;
-    color: #2366d1; }
-  .content .client-secret-value {
-    font-size: 20px;
-    font-weight: 300;
-    margin-left: 20px;
-    margin-top: 10px;
-    color: #292c2f; }
   .content #credentials-description-container {
     margin: auto auto 30px auto;
     font: 28px 'Roboto', Arial, Helvetica, sans-serif;
     width: 50%;
     text-align: left; }
-  .content #credentials-description {
-    color: #464647; }
-  .content #token-endpoint-title {
-    font-weight: 300;
-    color: #5e5e5e; }
 
 @media (max-height: 800px) {
   .content {

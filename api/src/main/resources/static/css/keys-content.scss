@@ -90,11 +90,72 @@ body{
 		}
 	}
 
+	.panel-heading{
+		padding: 20px 0px 20px 0px;
+		color: #ffffff;
+		text-align: center;
+		background-color: #608bd2;
+	}
+
+	$credential-text-title-color:#2366d1;
+	$credential-text-value-color:#292c2f;
+	$credential-background-color:#e8e8e8;
+
+	.panel-group{
+		font: 24px 'Roboto', Arial, Helvetica, sans-serif;
+		margin: auto;
+		width: 50%;
+	}
+
+	.panel{
+		background-color: $credential-background-color;
+	}
+
+	.client-id-title{
+		font-size:23px;
+		font-weight:300;
+		margin-left:20px;
+		margin-top:10px;
+		color: $credential-text-title-color;
+	}
+
+	.client-id-value{
+		font-size:20px;
+		font-weight:300;
+		margin-left:20px;
+		color: $credential-text-value-color;
+	}
+
+	.client-secret-title{
+		margin-left:20px;
+		margin-top:10px;
+		font-size:23px;
+		font-weight:300;
+		color: $credential-text-title-color;
+	}
+
+	.client-secret-value{
+		font-size:20px;
+		font-weight:300;
+		margin-left:20px;
+		padding-bottom: 10px;
+		color: $credential-text-value-color;
+	}
+
 	#credentials-description-container{
 		margin:auto auto 30px auto;
 		font: 28px 'Roboto', Arial, Helvetica, sans-serif;
 		width: 50%;
 		text-align: left;
+	}
+
+	#credentials-description{
+		color:#464647;
+	}
+
+	#token-endpoint-title{
+		font-weight: 300;
+		color:#5e5e5e;
 	}
 }
 

@@ -11,7 +11,7 @@ xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/s
 	<title>CheckMateFilter Spell checking and profanity filtering library</title>
 
 	<link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
-	<link rel="stylesheet" type="text/css" th:href="@{/css/home-content.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/keys-content.css}">
 	<link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
 	<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
@@ -29,7 +29,7 @@ xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/s
 
 			<nav>
 				<a href="#">Home</a>
-				<a th:href="@{/keys}" class="selected">Keys</a>
+				<a href="#" class="selected">Keys</a>
 				<a href="#">Contacts</a>
 			</nav>
 
@@ -48,7 +48,24 @@ xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/s
 
 
 	<div class="content">
-		<p id="credentials-description-container">Nothings here</p>
+		<div id="credentials-description-container">
+			<p id="credentials-description">These are client_app credentials to receive an access token via endpoint <span id="token-endpoint-title">'/oauth/token'</span> for using current API.</p>
+		</div>
+
+		<div class="panel-group">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<span>Client credentials</span>
+				</div>
+
+				<h1 class="client-id-title text-left">client_id</h1>
+				<p class="client-id-value text-left" th:utext="${client_id}"></p>
+
+				<h1 class="client-secret-title text-left">client_secret</h1>
+				<p class="client-secret-value text-left" th:utext="${client_secret}"></p>
+			</div>
+		</div>
+
 	</div>
 
 </body>
