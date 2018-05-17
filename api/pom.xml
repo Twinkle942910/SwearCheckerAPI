@@ -27,6 +27,7 @@
         <junit.version>4.12</junit.version>
         <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
         <postgresql.version>42.1.4</postgresql.version>
+        <flywaydb.version>5.0.5</flywaydb.version>
 
         <docker.image.prefix>twinkle94</docker.image.prefix>
 
